@@ -1,6 +1,7 @@
 package structures;
 
 import java.util.LinkedList;
+import java.lang.Math.*;
 
 import java.lang.UnsupportedOperationException;
 import java.lang.NullPointerException;
@@ -68,7 +69,7 @@ public class TablasHash {
 
   private int hashFunction(int k) throws Exception{
     
-    return k % this.size;
+    return Math.abs(k % this.size);
 
   }
 }

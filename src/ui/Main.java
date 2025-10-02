@@ -1,6 +1,11 @@
 package ui;
 
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
 import java.util.Scanner;
+import java.util.Set;
+
 import structures.PilaGenerica;
 import structures.TablasHash;
 
@@ -64,18 +69,81 @@ public class Main {
      * @return true si esta balanceada, false si no
      */
     public boolean verificarBalanceo(String s) {
-        // TODO: completar 
-        return false;
+        
+        if (s == null || s.isEmpty()) {
+        return true;
     }
 
+     PilaGenerica<Character> pila = new PilaGenerica<>(s.length());
+
+     for (int i = 0; i < s.length(); i++) {
+        char c = s.charAt(i);
+
+     if (c == '(' || c == '[' || c == '{') {
+            pila.Push(c);
+        }
+        
+        else if (c == ')' || c == ']' || c == '}') {
+            
+            if (pila.getTop() == 0) {
+                return false;
+            }
+
+            char tope = pila.Pop();
+
+           
+            if (!esPar(tope, c)) {
+                return false;
+            }
+        }
+       
+    }
+
+    
+    return pila.getTop() == 0;
+}
+
+
+private boolean esPar(char apertura, char cierre) {
+    return (apertura == '(' && cierre == ')') ||
+           (apertura == '[' && cierre == ']') ||
+           (apertura == '{' && cierre == '}');
+}
+
+
+    
+
+      
     /**
      * Encuentra y muestra todos los pares unicos de numeros que sumen objetivo usando TablasHash.
      * @param numeros arreglo de numeros enteros
      * @param objetivo suma objetivo
      */
-    public void encontrarParesConSuma(int[] numeros, int objetivo) {
-        // TODO: completar
+    public void encontrarParesConSuma(int[] numeros, int objetivo) throws Exception {
+    TablasHash tabla = new TablasHash(numeros.length * 2);
+    Set<String> paresUnicos = new HashSet<>();
+
+    for (int num : numeros) {
+        int complem = objetivo - num;
+
+        if (tabla.search(complem, complem)) {
+            int a = Math.min(num, complem);
+            int b = Math.max(num, complem);
+            paresUnicos.add("(" + a + ", " + b + ")");
+        }
+
+        tabla.insert(num, num);
     }
+
+    if (paresUnicos.isEmpty()) {
+        System.out.println("Ningún par encontrado para suma " + objetivo);
+    } else {
+        System.out.println("Pares: " + paresUnicos);
+    }
+}
+
+      
+    
 
     public static void main(String[] args) throws Exception {
         Main app = new Main();
